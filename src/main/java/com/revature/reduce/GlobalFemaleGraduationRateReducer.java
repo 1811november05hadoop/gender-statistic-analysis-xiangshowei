@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class FemaleGraduationRateReducer extends Reducer <Text, Text, Text, Text> {
+public class GlobalFemaleGraduationRateReducer extends Reducer <Text, Text, Text, Text> {
 	
 	public static final int NUM_CHARACTERS_UNTIL_FIRST_VALUE = 34;
 	//number of characters between the first character of first value and first character of subsequent value

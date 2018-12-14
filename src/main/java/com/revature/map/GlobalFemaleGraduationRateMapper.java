@@ -3,28 +3,29 @@ package com.revature.map;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.log4j.Logger;
 
-public class FemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text, Text> {
+public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text, Text> {
 
-	private static final Logger LOGGER = Logger.getLogger(FemaleGraduationRateMapper.class); 
+	private static final Logger LOGGER = Logger.getLogger(GlobalFemaleGraduationRateMapper.class); 
 
-	private static final int COUNTRY_NAME_COLUMN = 0;
-	private static final int COUNTRY_CODE_COLUMN = 1;
-	private static final int INDICATOR_CODE_COLUMN = 3;
+	public static final int COUNTRY_NAME_COLUMN = 0;
+	public static final int COUNTRY_CODE_COLUMN = 1;
+	public static final int INDICATOR_CODE_COLUMN = 3;
 	private static final int START_YEAR_COLUMN = 4;
-	private static final int END_YEAR_COLUMN = 59;
+	public static final int END_YEAR_COLUMN = 59;
 	//Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)
 	private static final String INDICATOR_CODE = "SE.SEC.CUAT.LO.FE.ZS";
 	private static final int THRESHOLD = 30;
 	private static final int START_YEAR = 1960;
 	
-	private static final HashSet<String> conglomerateCountryCodes = 
-			new HashSet<>(Arrays.asList("Country Code", 
+	private static final Set<String> conglomerateCountryCodes = 
+			new HashSet<String>(Arrays.asList("Country Code", 
 					"ARB", "CSS", "CEB", "EAR", "EAS",
 					"EAP", "TEA", "EMU", "ECS", "ECA", 
 					"TEC", "EUU", "FCS", "HPC", "HIC", 
@@ -73,20 +74,22 @@ public class FemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text,
 		if(relevantData) {
 			// Country Name is the first column in the data so it doesn't match the regular expression
 			String countryName = row[COUNTRY_NAME_COLUMN].replaceFirst("\"", "");
-			int year = START_YEAR - 1;
+			int year = START_YEAR;
 
 			for (int i = START_YEAR_COLUMN; i <= END_YEAR_COLUMN; i++) {
 				String graduationRateInYearStr = row[i];
 				double graduationRateInYear;
-				year++;
 
+				//only processing the columns that have data
 				if (!graduationRateInYearStr.isEmpty()) {
 					graduationRateInYear = Double.parseDouble(graduationRateInYearStr);	
 					
 					if (graduationRateInYear < THRESHOLD) {
 						context.write(new Text(countryName), new Text(year + "," + graduationRateInYear));
 					}
-				}
+				}	
+				
+				year++;
 			}
 		}
 	}

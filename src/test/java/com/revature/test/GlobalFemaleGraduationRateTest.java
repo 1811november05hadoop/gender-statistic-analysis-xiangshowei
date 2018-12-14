@@ -11,10 +11,10 @@ import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revature.map.FemaleGraduationRateMapper;
-import com.revature.reduce.FemaleGraduationRateReducer;
+import com.revature.map.GlobalFemaleGraduationRateMapper;
+import com.revature.reduce.GlobalFemaleGraduationRateReducer;
 
-public class FemaleGraduationRateTest {
+public class GlobalFemaleGraduationRateTest {
 	
 	private MapDriver<LongWritable, Text, Text, Text> mapDriver;
 	private ReduceDriver<Text, Text, Text, Text> reduceDriver;
@@ -22,11 +22,11 @@ public class FemaleGraduationRateTest {
 	
 	@Before
 	public void setUp() {
-		FemaleGraduationRateMapper fgrMapper = new FemaleGraduationRateMapper();
+		GlobalFemaleGraduationRateMapper fgrMapper = new GlobalFemaleGraduationRateMapper();
 		mapDriver = new MapDriver<>();
 		mapDriver.setMapper(fgrMapper);
 
-		FemaleGraduationRateReducer fgrReducer = new FemaleGraduationRateReducer();
+		GlobalFemaleGraduationRateReducer fgrReducer = new GlobalFemaleGraduationRateReducer();
 		reduceDriver = new ReduceDriver<>();
 		reduceDriver.setReducer(fgrReducer);
 		
@@ -53,7 +53,7 @@ public class FemaleGraduationRateTest {
 		values.add(new Text("1975,1.40144"));
 		values.add(new Text("1979,0.8031"));
 		
-		String formattedKey = String.format("%-" + FemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
+		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
 		
 		reduceDriver.withInput(new Text(formattedKey), values);
 		reduceDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
@@ -66,7 +66,7 @@ public class FemaleGraduationRateTest {
 		mapReduceDriver.withInput(new LongWritable(1), 
 				new Text(escapeCharacterInInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")));
 		
-		String formattedKey = String.format("%-" + FemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
+		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
 		mapReduceDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
 		
 		mapReduceDriver.runTest(); 
