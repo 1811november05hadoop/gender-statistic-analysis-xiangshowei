@@ -5,20 +5,22 @@ import static com.revature.map.GlobalFemaleGraduationRateMapper.*;
 import java.io.IOException;
 
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class USFemaleEducationAttainmentRateMapper extends Mapper<LongWritable, Text, IntWritable, DoubleWritable> {
+/**
+ * List the average increase in female education in the U.S. from the year 2000.
+ *
+ */
+public class USFemaleEducationAttainmentRateMapper extends Mapper<LongWritable, Text, NullWritable, DoubleWritable> {
 
 	private static final int START_YEAR_COLUMN = END_YEAR_COLUMN - 15;
 
 	public static final String COUNTRY_CODE = "USA";
 	//Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)
 	private static final String INDICATOR_CODE = "SE.SEC.CUAT.LO.FE.ZS";
-
-	public static final int START_YEAR = 2000;
 
 	public void map(LongWritable key, Text value, Context context) 
 			throws IOException, InterruptedException {
@@ -39,22 +41,20 @@ public class USFemaleEducationAttainmentRateMapper extends Mapper<LongWritable, 
 		}
 
 		if(relevantData) {
-			int year = START_YEAR;
+			for (int i = START_YEAR_COLUMN + 1; i <= END_YEAR_COLUMN; i++) {
+				String educationAttainmentRateStartYearStr = row[i - 1];
+				String educationAttainmentRateEndYearStr = row[i];
+				double educationAttainmentRateDelta;
 
-			for (int i = START_YEAR_COLUMN; i <= END_YEAR_COLUMN; i++) {
-				String educationAttainmentRateStr = row[i];
-				double educationAttainmentRate;
-
-				if(!educationAttainmentRateStr.isEmpty()) {
-					educationAttainmentRate = Double.parseDouble(educationAttainmentRateStr);
-					context.write(new IntWritable(year), new DoubleWritable(educationAttainmentRate));
-					
-				}
-					
-				year++;			
+				//only consider as a data point if there are data for 2 consecutive years; 
+				//can't calculate change for each year with only one year's worth of data
+				if(!educationAttainmentRateStartYearStr.isEmpty()) {
+					if(!educationAttainmentRateEndYearStr.isEmpty()) {
+						educationAttainmentRateDelta = Double.parseDouble(educationAttainmentRateEndYearStr) - Double.parseDouble(educationAttainmentRateStartYearStr);
+						context.write(NullWritable.get(), new DoubleWritable(educationAttainmentRateDelta));
+					}
+				}	
 			}			
 		}
 	}
-	
-	//TODO: overwrite run() method to stop processing after finding the indicator code of the country
 }

@@ -10,5 +10,4 @@ public class USFemaleEducationAttainmentRateRunner {
 		int exitCode = ToolRunner.run(new Configuration(), new USFemaleEducationAttainmentRateJob(), args);
 		System.exit(exitCode);
 	}
-
 }
