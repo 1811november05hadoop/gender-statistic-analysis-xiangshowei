@@ -8,11 +8,8 @@ import java.util.Set;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.log4j.Logger;
 
 public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text, Text> {
-
-	private static final Logger LOGGER = Logger.getLogger(GlobalFemaleGraduationRateMapper.class); 
 
 	public static final int COUNTRY_NAME_COLUMN = 0;
 	public static final int COUNTRY_CODE_COLUMN = 1;

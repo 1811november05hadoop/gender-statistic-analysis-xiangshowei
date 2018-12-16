@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  * List the average increase in female education in the U.S. from the year 2000.
  *
  */
-public class USFemaleEducationAttainmentRateMapper extends Mapper<LongWritable, Text, NullWritable, DoubleWritable> {
+public class USAverageIncreaseInFemaleEducationAttainmentMapper extends Mapper<LongWritable, Text, NullWritable, DoubleWritable> {
 
 	private static final int START_YEAR_COLUMN = END_YEAR_COLUMN - 15;
 

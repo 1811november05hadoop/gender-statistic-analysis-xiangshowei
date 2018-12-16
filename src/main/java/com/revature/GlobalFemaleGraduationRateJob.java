@@ -7,25 +7,14 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
-import org.apache.log4j.Logger;
 
 import com.revature.map.GlobalFemaleGraduationRateMapper;
 import com.revature.reduce.GlobalFemaleGraduationRateReducer;
 
 public class GlobalFemaleGraduationRateJob extends Configured implements Tool {
 
-	private static final Logger LOGGER = Logger.getLogger(GlobalFemaleGraduationRateJob.class);
-	private static final int NUMBER_OF_ARGUMENTS = 2;
-
 	@Override
 	public int run(String[] args) throws Exception {
-		if(args.length != NUMBER_OF_ARGUMENTS) {
-			LOGGER.info("Usage: GlobalFemaleGraduationRateJob <input_dir> <output_dir>");
-
-			return -1;
-		}
-
-		else {
 			Job job = new Job();
 
 			job.setJobName("Female Graduation Rate in Each Country");
@@ -46,6 +35,5 @@ public class GlobalFemaleGraduationRateJob extends Configured implements Tool {
 			boolean jobComplete = job.waitForCompletion(true);
 
 			return jobComplete ? 0 : 1;
-		}
 	}
 }

@@ -18,7 +18,8 @@ public class GlobalFemaleGraduationRateTest {
 	
 	private MapDriver<LongWritable, Text, Text, Text> mapDriver;
 	private ReduceDriver<Text, Text, Text, Text> reduceDriver;
-	private MapReduceDriver<LongWritable, Text, Text, Text, Text, Text> mapReduceDriver;
+	private MapReduceDriver<LongWritable, Text, Text, Text, Text, Text> mrDriver;
+	private String input;
 	
 	@Before
 	public void setUp() {
@@ -30,16 +31,16 @@ public class GlobalFemaleGraduationRateTest {
 		reduceDriver = new ReduceDriver<>();
 		reduceDriver.setReducer(fgrReducer);
 		
-		mapReduceDriver = new MapReduceDriver<>();
-		mapReduceDriver.setMapper(fgrMapper);
-		mapReduceDriver.setReducer(fgrReducer);
+		mrDriver = new MapReduceDriver<>();
+		mrDriver.setMapper(fgrMapper);
+		mrDriver.setReducer(fgrReducer);
 	}
 	
 	@Test
-	public void testFemaleGraduationRateMapper() {
-		mapDriver.withInput(new LongWritable(1), 
-				new Text(escapeCharacterInInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")));
+	public void testGlobalFemaleGraduationRateMapper() {
+		input = simulateInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","");
 		
+		mapDriver.withInput(new LongWritable(1), new Text(input));
 		mapDriver.withOutput(new Text("Afghanistan"), new Text("1975,1.40144"));
 		mapDriver.withOutput(new Text("Afghanistan"), new Text("1979,0.8031"));
 		
@@ -47,7 +48,7 @@ public class GlobalFemaleGraduationRateTest {
 	}
 	
 	@Test
-	public void testFemaleGraduationRateReducer() {
+	public void testGlobalFemaleGraduationRateReducer() {
 		List<Text> values = new ArrayList<>();
 		
 		values.add(new Text("1975,1.40144"));
@@ -62,14 +63,14 @@ public class GlobalFemaleGraduationRateTest {
 	}
 	
 	@Test
-	public void testFemaleGraduationRateMapReduce() {
-		mapReduceDriver.withInput(new LongWritable(1), 
-				new Text(escapeCharacterInInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")));
+	public void testGlobalFemaleGraduationRateMapReduce() {
+		input = simulateInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","");
 		
+		mrDriver.withInput(new LongWritable(1), new Text(input));
 		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
-		mapReduceDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
+		mrDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
 		
-		mapReduceDriver.runTest(); 
+		mrDriver.runTest(); 
 	}
 	
 	/**
@@ -77,7 +78,7 @@ public class GlobalFemaleGraduationRateTest {
 	 * for each argument to simulate the input received by 
 	 * mapper and reducer
 	 */
-	private static String escapeCharacterInInput(String... input) {
+	public static String simulateInput(String... input) {
 		StringBuilder sb = new StringBuilder(input.length);
 		
 		for (int i = 0; i < input.length; i++) {
