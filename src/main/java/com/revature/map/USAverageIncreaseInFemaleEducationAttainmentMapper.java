@@ -1,6 +1,8 @@
 package com.revature.map;
 
-import static com.revature.map.GlobalFemaleGraduationRateMapper.*;
+import static com.revature.map.GlobalFemaleGraduationRateMapper.END_YEAR_COLUMN;
+import static com.revature.map.GlobalFemaleGraduationRateMapper.COUNTRY_CODE_COLUMN;
+import static com.revature.map.GlobalFemaleGraduationRateMapper.INDICATOR_CODE_COLUMN;
 
 import java.io.IOException;
 
@@ -22,6 +24,7 @@ public class USAverageIncreaseInFemaleEducationAttainmentMapper extends Mapper<L
 	//Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)
 	private static final String INDICATOR_CODE = "SE.SEC.CUAT.LO.FE.ZS";
 
+	@Override
 	public void map(LongWritable key, Text value, Context context) 
 			throws IOException, InterruptedException {
 
@@ -50,7 +53,9 @@ public class USAverageIncreaseInFemaleEducationAttainmentMapper extends Mapper<L
 				//can't calculate change for each year with only one year's worth of data
 				if(!educationAttainmentRateStartYearStr.isEmpty()) {
 					if(!educationAttainmentRateEndYearStr.isEmpty()) {
-						educationAttainmentRateDelta = Double.parseDouble(educationAttainmentRateEndYearStr) - Double.parseDouble(educationAttainmentRateStartYearStr);
+						educationAttainmentRateDelta = Double.parseDouble(educationAttainmentRateEndYearStr) 
+								- Double.parseDouble(educationAttainmentRateStartYearStr);
+						
 						context.write(NullWritable.get(), new DoubleWritable(educationAttainmentRateDelta));
 					}
 				}	

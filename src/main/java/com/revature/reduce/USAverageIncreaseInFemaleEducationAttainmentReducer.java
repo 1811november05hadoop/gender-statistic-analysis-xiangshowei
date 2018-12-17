@@ -8,6 +8,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class USAverageIncreaseInFemaleEducationAttainmentReducer extends Reducer<NullWritable, DoubleWritable, NullWritable, DoubleWritable>{
 	
+	@Override
 	public void reduce(NullWritable key, Iterable<DoubleWritable> values, Context context)
 			throws IOException, InterruptedException {
 		

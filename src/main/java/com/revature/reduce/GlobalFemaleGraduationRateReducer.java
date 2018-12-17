@@ -9,8 +9,9 @@ public class GlobalFemaleGraduationRateReducer extends Reducer <Text, Text, Text
 	
 	//number of characters between the first character of first value and first character of subsequent value
 	private static final int NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS = 16;
-	public static final int NUM_CHARACTERS_UNTIL_FIRST_VALUE = 34;
+	public static final int NUM_CHARACTERS_UNTIL_FIRST_VALUE = 30;
 	
+	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) 
 			throws IOException, InterruptedException{
 		

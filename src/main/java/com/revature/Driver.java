@@ -15,8 +15,8 @@ public class Driver {
 			LOGGER.info("Usage: Driver <input_dir> <output_dir> <number> \n"
 					+ "1: Countries where the number of female graduates is less than 30% \n"
 					+ "2: Average increase of education attainmenet rate by females in the US \n"
-					+ "3: \n"
-					+ "4: \n"
+					+ "3: Change in employment rate for males since 2000\n"
+					+ "4: Change in employment rate for females since 2000\n"
 					+ "5: \n");
 
 			System.exit(exitCode);
@@ -34,6 +34,13 @@ public class Driver {
 			case "2":
 				exitCode = ToolRunner.run(new USAverageIncreaseInFemaleEducationAttainmentJob(), args);
 				break;
+				
+			case "3":
+				exitCode = ToolRunner.run(new MaleEmploymentChangeJob(), args);
+				break;
+				
+			case "4":
+				exitCode = ToolRunner.run(new FemaleEmploymentChangeJob(), args);
 
 			default: 
 				LOGGER.info("Options are limited to 1 ~ 5");

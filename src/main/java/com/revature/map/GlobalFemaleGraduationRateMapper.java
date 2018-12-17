@@ -21,7 +21,7 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 	private static final int THRESHOLD = 30;
 	private static final int START_YEAR = 1960;
 	
-	private static final Set<String> conglomerateCountryCodes = 
+	public static final Set<String> CONGLOMERATE_COUNTRY_CODES = 
 			new HashSet<String>(Arrays.asList("Country Code", 
 					"ARB", "CSS", "CEB", "EAR", "EAS",
 					"EAP", "TEA", "EMU", "ECS", "ECA", 
@@ -33,6 +33,7 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 					"PSS", "PST", "PRE", "SST", "SAS", 
 					"TSA", "SSF", "SSA", "TSS", "UMC", "WLD"));
 
+	@Override
 	public void map(LongWritable key, Text value, Context context) 
 			throws IOException, InterruptedException {
 
@@ -62,7 +63,7 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 
 		boolean relevantData = false;
 
-		if(!conglomerateCountryCodes.contains(countryCode)) {
+		if(!CONGLOMERATE_COUNTRY_CODES.contains(countryCode)) {
 			if(indicatorCode.equals(INDICATOR_CODE)) {
 				relevantData = true;
 			}
