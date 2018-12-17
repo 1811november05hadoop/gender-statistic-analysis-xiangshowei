@@ -29,9 +29,7 @@ public class USAverageIncreaseInFemaleEducationAttainmentMapper extends Mapper<L
 			throws IOException, InterruptedException {
 
 		String inputSplit = value.toString();
-
 		String[] row = inputSplit.split("\",\"");
-
 		String countryCode = row[COUNTRY_CODE_COLUMN];		
 		String indicatorCode = row[INDICATOR_CODE_COLUMN];
 

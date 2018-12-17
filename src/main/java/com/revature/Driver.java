@@ -17,7 +17,7 @@ public class Driver {
 					+ "2: Average increase of education attainmenet rate by females in the US \n"
 					+ "3: Change in employment rate for males since 2000\n"
 					+ "4: Change in employment rate for females since 2000\n"
-					+ "5: \n");
+					+ "5: Delayed enrollment rate for females in the US since 2010\n");
 
 			System.exit(exitCode);
 		}
@@ -41,6 +41,11 @@ public class Driver {
 				
 			case "4":
 				exitCode = ToolRunner.run(new FemaleEmploymentChangeJob(), args);
+				break;
+				
+			case "5":
+				exitCode = ToolRunner.run(new USFemaleDelayedSchoolEnrollmentRateJob(), args);
+				break;
 
 			default: 
 				LOGGER.info("Options are limited to 1 ~ 5");
