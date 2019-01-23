@@ -2,22 +2,20 @@ package com.revature.reduce;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class GlobalFemaleGraduationRateReducer extends Reducer <Text, Text, Text, Text> {
+public class GlobalFemaleGraduationRateReducer extends Reducer <Text, NullWritable, Text, NullWritable> {
 	
 	//number of characters between the first character of first value and first character of subsequent value
-	private static final int NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS = 16;
+	public static final int NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS = 10;
 	public static final int NUM_CHARACTERS_UNTIL_FIRST_VALUE = 30;
 	
 	@Override
-	public void reduce(Text key, Iterable<Text> values, Context context) 
+	public void reduce(Text key, Iterable<NullWritable> values, Context context) 
 			throws IOException, InterruptedException{
 		
-		StringBuilder output = new StringBuilder();
-		
-		for (Text value : values) {
 			/* String.format() starts counting characters with respect 
 			 * to the string in its second argument while disregarding 
 			 * any String concatenations that precede the string; 
@@ -82,10 +80,8 @@ public class GlobalFemaleGraduationRateReducer extends Reducer <Text, Text, Text
 			 * 
 			 * ----------copied from above link----------
 			 */
-			output.append(String.format("%-" + NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS + "s", "(" + value.toString() + ")"));
-		}
 
-		context.write(new Text(String.format("%-" + NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", key.toString())), new Text(output.toString()));
+		context.write(key, NullWritable.get());
 	}
 
 }

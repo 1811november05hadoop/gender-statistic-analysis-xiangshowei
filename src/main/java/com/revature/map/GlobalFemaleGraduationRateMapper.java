@@ -6,10 +6,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text, Text> {
+public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
 
 	public static final int COUNTRY_NAME_COLUMN = 0;
 	public static final int COUNTRY_CODE_COLUMN = 1;
@@ -19,7 +20,6 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 	//Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)
 	private static final String INDICATOR_CODE = "SE.SEC.CUAT.LO.FE.ZS";
 	private static final int THRESHOLD = 30;
-	private static final int START_YEAR = 1960;
 	
 	public static final Set<String> CONGLOMERATE_COUNTRY_CODES = 
 			new HashSet<String>(Arrays.asList("Country Code", 
@@ -72,8 +72,7 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 		if(relevantData) {
 			// Country Name is the first column in the data so it doesn't match the regular expression
 			String countryName = row[COUNTRY_NAME_COLUMN].replaceFirst("\"", "");
-			int year = START_YEAR;
-
+			
 			for (int i = START_YEAR_COLUMN; i <= END_YEAR_COLUMN; i++) {
 				String graduationRateInYearStr = row[i];
 				double graduationRateInYear;
@@ -83,11 +82,9 @@ public class GlobalFemaleGraduationRateMapper extends Mapper<LongWritable, Text,
 					graduationRateInYear = Double.parseDouble(graduationRateInYearStr);	
 					
 					if (graduationRateInYear < THRESHOLD) {
-						context.write(new Text(countryName), new Text(year + "," + graduationRateInYear));
+						context.write(new Text(countryName), NullWritable.get());
 					}
-				}	
-				
-				year++;
+				}
 			}
 		}
 	}

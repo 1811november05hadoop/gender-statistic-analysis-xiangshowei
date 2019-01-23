@@ -36,11 +36,11 @@ public class Driver {
 				break;
 				
 			case "3":
-				exitCode = ToolRunner.run(new MaleEmploymentChangeJob(), args);
+				exitCode = ToolRunner.run(new MaleEmploymentRateChangeJob(), args);
 				break;
 				
 			case "4":
-				exitCode = ToolRunner.run(new FemaleEmploymentChangeJob(), args);
+				exitCode = ToolRunner.run(new FemaleEmploymentRateChangeJob(), args);
 				break;
 				
 			case "5":

@@ -6,7 +6,7 @@ import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revature.map.FemaleEmploymentChangeMapper;
+import com.revature.map.FemaleEmploymentRateChangeMapper;
 import com.revature.reduce.GlobalFemaleGraduationRateReducer;
 
 public class FemaleEmploymentChangeTest {
@@ -16,7 +16,7 @@ public class FemaleEmploymentChangeTest {
 	
 	@Before
 	public void setUp(){
-		FemaleEmploymentChangeMapper fecMapper = new FemaleEmploymentChangeMapper();
+		FemaleEmploymentRateChangeMapper fecMapper = new FemaleEmploymentRateChangeMapper();
 		mapDriver = new MapDriver<>();
 		mapDriver.setMapper(fecMapper);
 	}

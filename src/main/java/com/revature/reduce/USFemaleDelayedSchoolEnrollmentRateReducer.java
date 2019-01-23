@@ -18,6 +18,7 @@ public class USFemaleDelayedSchoolEnrollmentRateReducer extends Reducer<IntWrita
 		for (Text value : values) {
 			String[] input = value.toString().split(":");
 
+
 			String grossEnrollmentRate = input[0];
 			String netEnrollmentRate = input[1];
 
@@ -25,8 +26,8 @@ public class USFemaleDelayedSchoolEnrollmentRateReducer extends Reducer<IntWrita
 				enrollmentRateDelta = Double.parseDouble(input[0]) - 
 						Double.parseDouble(input[1]);
 			}
-		}
 
-		context.write(key, new DoubleWritable(enrollmentRateDelta));
+			context.write(key, new DoubleWritable(enrollmentRateDelta));
+		}
 	}
 }

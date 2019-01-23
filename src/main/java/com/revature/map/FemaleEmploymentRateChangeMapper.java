@@ -13,24 +13,14 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class MaleEmploymentChangeMapper extends Mapper<LongWritable, Text, Text, Text>{
+public class FemaleEmploymentRateChangeMapper extends Mapper<LongWritable, Text, Text, Text>{
 	
 	private static final int START_YEAR_COLUMN = END_YEAR_COLUMN - 14;
-	//Employment to population ratio, 15+, male (%) (modeled ILO estimate)
-	private static final String INDICATOR_CODE = "SL.EMP.TOTL.SP.MA.ZS";
+	//Employment to population ratio, 15+, female (%) (modeled ILO estimate)
+	private static final String INDICATOR_CODE = "SL.EMP.TOTL.SP.FE.ZS";
 	
 	private static final int NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS = 8;
 	private static final int DECIMAL_PLACES = 3;
-	
-//	@Override
-//	public void setup(Context context) throws IOException, InterruptedException {
-//		
-//		Text formattedHeaderKey = new Text(String.format("%-" + NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Country"));
-//		Text formattedHeaderValue = new Text("2000-01 *  2001-02 *  2002-03 *  2003-04 *  2004-05 *  2005-06 *  2006-07 *  "
-//				+ "2007-08 *  2008-09 *  2009-10 *  2010-11 *  2011-12 *  2012-13 *  2013-14 *  2014-15 *  2015-16 *  ");
-//		
-//		context.write(formattedHeaderKey, formattedHeaderValue);
-//	}
 	
 	@Override
 	public void map(LongWritable key, Text value, Context context)
@@ -65,14 +55,7 @@ public class MaleEmploymentChangeMapper extends Mapper<LongWritable, Text, Text,
 						unemploymentRateDelta = Double.parseDouble(unemploymentRateEndYear) 
 								- Double.parseDouble(unemploymentRateStartYear);
 						
-						//add + sign to output if the result is 0 or higher 
 						if (unemploymentRateDelta >= 0 ) {
-							/* employment rate between subsequent years are separated by 
-							 * the specified number of characters apart;
-							 * 
-							 * employment rates themselves are limited to
-							 * the specified number of decimal places
-							 */
 							outputValue.append("+" + String.format("%-" + (NUM_CHARACTERS_BETWEEN_FIRST_CHARACTERS - 1) + "s", 
 									String.format("%."+ DECIMAL_PLACES+ "f%%", unemploymentRateDelta)) + " *  ");
 						}

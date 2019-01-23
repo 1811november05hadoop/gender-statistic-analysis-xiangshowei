@@ -8,21 +8,21 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 
-import com.revature.map.FemaleEmploymentChangeMapper;
+import com.revature.map.FemaleEmploymentRateChangeMapper;
 
-public class FemaleEmploymentChangeJob extends Configured implements Tool {
+public class FemaleEmploymentRateChangeJob extends Configured implements Tool {
 	
 	@Override
 	public int run(String[] args) throws Exception {
 		Job job = new Job();
 
 		job.setJobName("Change in employment rates for females since 2000");
-		job.setJarByClass(FemaleEmploymentChangeJob.class);
+		job.setJarByClass(FemaleEmploymentRateChangeJob.class);
 
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		
-		job.setMapperClass(FemaleEmploymentChangeMapper.class);
+		job.setMapperClass(FemaleEmploymentRateChangeMapper.class);
 		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);

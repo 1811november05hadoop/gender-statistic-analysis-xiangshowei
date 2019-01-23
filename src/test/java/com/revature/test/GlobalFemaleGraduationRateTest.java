@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.MapReduceDriver;
@@ -16,9 +17,9 @@ import com.revature.reduce.GlobalFemaleGraduationRateReducer;
 
 public class GlobalFemaleGraduationRateTest {
 	
-	private MapDriver<LongWritable, Text, Text, Text> mapDriver;
-	private ReduceDriver<Text, Text, Text, Text> reduceDriver;
-	private MapReduceDriver<LongWritable, Text, Text, Text, Text, Text> mrDriver;
+	private MapDriver<LongWritable, Text, Text, NullWritable> mapDriver;
+	private ReduceDriver<Text, NullWritable, Text, NullWritable> reduceDriver;
+	private MapReduceDriver<LongWritable, Text, Text, NullWritable, Text, NullWritable> mrDriver;
 	private String input;
 	
 	@Before
@@ -41,23 +42,23 @@ public class GlobalFemaleGraduationRateTest {
 		input = simulateInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","");
 		
 		mapDriver.withInput(new LongWritable(1), new Text(input));
-		mapDriver.withOutput(new Text("Afghanistan"), new Text("1975,1.40144"));
-		mapDriver.withOutput(new Text("Afghanistan"), new Text("1979,0.8031"));
+		mapDriver.withOutput(new Text("Afghanistan"), NullWritable.get());
+		mapDriver.withOutput(new Text("Afghanistan"), NullWritable.get());
 		
 		mapDriver.runTest();
 	}
 	
 	@Test
 	public void testGlobalFemaleGraduationRateReducer() {
-		List<Text> values = new ArrayList<>();
+		List<NullWritable> values = new ArrayList<>();
 		
-		values.add(new Text("1975,1.40144"));
-		values.add(new Text("1979,0.8031"));
+		values.add(NullWritable.get());
+		values.add(NullWritable.get());
 		
-		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
+//		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
 		
-		reduceDriver.withInput(new Text(formattedKey), values);
-		reduceDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
+		reduceDriver.withInput(new Text("Afghanistan"), values);
+		reduceDriver.withOutput(new Text("Afghanistan"), NullWritable.get());
 		
 		reduceDriver.runTest();
 	}
@@ -67,8 +68,7 @@ public class GlobalFemaleGraduationRateTest {
 		input = simulateInput("Afghanistan","AFG","Educational attainment, at least completed lower secondary, population 25+, female (%) (cumulative)","SE.SEC.CUAT.LO.FE.ZS","","","","","","","","","","","","","","","","1.40144","","","","0.8031","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","");
 		
 		mrDriver.withInput(new LongWritable(1), new Text(input));
-		String formattedKey = String.format("%-" + GlobalFemaleGraduationRateReducer.NUM_CHARACTERS_UNTIL_FIRST_VALUE + "s", "Afghanistan");
-		mrDriver.withOutput(new Text(formattedKey), new Text("(1975,1.40144)  (1979,0.8031)   "));
+		mrDriver.withOutput(new Text("Afghanistan"), NullWritable.get());
 		
 		mrDriver.runTest(); 
 	}

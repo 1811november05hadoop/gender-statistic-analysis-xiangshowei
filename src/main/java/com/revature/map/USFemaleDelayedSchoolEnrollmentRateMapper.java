@@ -6,6 +6,8 @@ import static com.revature.map.GlobalFemaleGraduationRateMapper.INDICATOR_CODE_C
 import static com.revature.map.USAverageIncreaseInFemaleEducationAttainmentMapper.COUNTRY_CODE;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -42,28 +44,37 @@ public class USFemaleDelayedSchoolEnrollmentRateMapper extends Mapper<LongWritab
 
 			for (int i = START_YEAR_COLUMN; i <= END_YEAR_COLUMN; i++) {
 				
-				String femaleGrossSchoolEnrollmentRateInYearStr;
-				String femaleNetSchoolEnrollmentRateInYearStr;
-				StringBuilder schoolEnrollmentRateInYear = new StringBuilder();
+				List<String> femaleGrossEnrollmentRate = new ArrayList<>();
+				List<String> femaleNetEnrollmentRate = new ArrayList<>();
+				
+//				String femaleGrossSchoolEnrollmentRateInYearStr;
+//				String femaleNetSchoolEnrollmentRateInYearStr;
+				
+//				StringBuilder schoolEnrollmentRateInYear = new StringBuilder();
 
 				if(indicatorCode.equals(FEMALE_GROSS_SCHOOL_ENROLLMENT_INDICATOR_CODE)) {
-					femaleGrossSchoolEnrollmentRateInYearStr = row[i];
+					String femaleGrossSchoolEnrollmentRateInYearStr = row[i];
 					
 					if(!femaleGrossSchoolEnrollmentRateInYearStr.isEmpty()) {
-						schoolEnrollmentRateInYear.append('g' + femaleGrossSchoolEnrollmentRateInYearStr );
-						context.write(new IntWritable(year), new Text(schoolEnrollmentRateInYear.toString()));
+//						schoolEnrollmentRateInYear.append('g' + femaleGrossSchoolEnrollmentRateInYearStr );
+						femaleGrossEnrollmentRate.add(femaleGrossSchoolEnrollmentRateInYearStr);
+//						context.write(new IntWritable(year), new Text(schoolEnrollmentRateInYear.toString()));
 					}
 				}
 
 				else if(indicatorCode.equals(FEMALE_NET_SCHOOL_ENROLLMENT_INDICATOR_CODE)) {
-					femaleNetSchoolEnrollmentRateInYearStr = row[i];
+					String femaleNetSchoolEnrollmentRateInYearStr = row[i];
 					
 					if(!femaleNetSchoolEnrollmentRateInYearStr.isEmpty()) {
-						schoolEnrollmentRateInYear.append('n' + femaleNetSchoolEnrollmentRateInYearStr);
-						context.write(new IntWritable(year), new Text(schoolEnrollmentRateInYear.toString()));
+//						schoolEnrollmentRateInYear.append('n' + femaleNetSchoolEnrollmentRateInYearStr);
+						
+						femaleNetEnrollmentRate.add(femaleNetSchoolEnrollmentRateInYearStr);
+//						context.write(new IntWritable(year), new Text(schoolEnrollmentRateInYear.toString()));
 					}
 				}
 
+				
+				
 				year++;
 			}			
 		}
